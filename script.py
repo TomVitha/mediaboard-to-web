@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from jinja2 import Environment, DictLoader
 # For handling file paths
 from pathlib import Path
+from datetime import datetime
 
 
 # === FUNCTIONS ===
@@ -80,6 +81,12 @@ def generate_html_from_template(stories, out_folder, out_file_name):
           <td>{{ story.source }}</td>
           <td><a target="_blank" href="{{ story.article_url }}">{{ story.heading }}</a></td>
         </tr>{% endfor %}"""
+    
+    
+    # Prepend/append template_str with lines of HTML comments with current date
+    today_8601 = datetime.now().strftime("%Y-%m-%d")
+    template_str = f"<!-- Přidáno {today_8601} -->\n{template_str}\n        \n<!-- Přidáno {today_8601} (end) -->"
+
 
     # Create a Jinja2 environment with the template string
     env = Environment(loader=DictLoader({'template.html': template_str}))
